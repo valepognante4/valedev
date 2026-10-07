@@ -32,6 +32,17 @@ const en = {
     primary: "View services",
     secondary: "Request a proposal",
     session: "live session",
+    marqueeLabel: "Technologies and services",
+    marquee: [
+      "Java",
+      "Spring Boot",
+      "React",
+      "REST APIs",
+      "Custom software",
+      "E-commerce",
+      "SQL",
+      "Docker",
+    ],
     lines: [
       { kind: "cmd", text: "vale build --business" },
       { kind: "ok", text: "scope          defined" },

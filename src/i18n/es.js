@@ -32,6 +32,17 @@ const es = {
     primary: "Ver servicios",
     secondary: "Solicitar propuesta",
     session: "sesión activa",
+    marqueeLabel: "Tecnologías y servicios",
+    marquee: [
+      "Java",
+      "Spring Boot",
+      "React",
+      "APIs REST",
+      "Desarrollo a medida",
+      "E-commerce",
+      "SQL",
+      "Docker",
+    ],
     lines: [
       { kind: "cmd", text: "vale build --negocio" },
       { kind: "ok", text: "alcance        definido" },

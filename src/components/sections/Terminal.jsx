@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { trackSpot } from "@/lib/spot";
 
 const tone = {
   cmd: "text-ink",
@@ -10,7 +11,7 @@ export default function Terminal({ title, lines }) {
   const reduce = useReducedMotion();
 
   return (
-    <div className="glow-card is-static relative p-3 shadow-panel md:p-4">
+    <div className="spot glow-card is-static relative p-3 shadow-panel md:p-4" onPointerMove={trackSpot}>
       <div
         className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full blur-3xl"
         style={{ background: "radial-gradient(circle, var(--glow-a), transparent 70%)" }}
@@ -31,8 +32,7 @@ export default function Terminal({ title, lines }) {
         <motion.ol
           className="space-y-3 px-5 py-6 font-mono text-[13px] leading-relaxed md:text-sm"
           initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-10% 0px" }}
+          animate="show"
           variants={{
             hidden: {},
             show: { transition: { staggerChildren: reduce ? 0 : 0.16, delayChildren: reduce ? 0 : 0.15 } },

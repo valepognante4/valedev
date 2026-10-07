@@ -191,7 +191,6 @@ html.theme-animate {
 }
 
 .glow-card > * {
-  position: relative;
   z-index: 1;
 }
 
@@ -352,6 +351,129 @@ html.theme-animate {
   }
 }
 
+.spot {
+  --mx: 50%;
+  --my: 30%;
+}
+
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--mx) var(--my),
+    color-mix(in srgb, var(--accent) 34%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.spot:hover::before {
+  opacity: 1;
+}
+
+.hero-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-dot {
+  position: absolute;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brass) 60%, var(--accent));
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 80%, transparent);
+  opacity: 0.45;
+  transform: translate3d(calc(var(--px, 0) * var(--depth) * 1px), calc(var(--py, 0) * var(--depth) * 1px), 0);
+  animation: hero-dot 7.5s ease-in-out infinite;
+}
+
+.hero-follow {
+  position: absolute;
+  z-index: 0;
+  width: 280px;
+  height: 280px;
+  left: var(--mx, 62%);
+  top: var(--my, 42%);
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--glow-a), transparent 68%);
+  filter: blur(6px);
+  opacity: 0.75;
+  pointer-events: none;
+  transition:
+    left 0.35s ease,
+    top 0.35s ease;
+}
+
+.float-panel {
+  animation: float-panel 7s ease-in-out infinite;
+}
+
+.float-chip {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 16%, transparent),
+    0 12px 30px -18px var(--glow-a);
+  backdrop-filter: blur(12px);
+  animation: float-chip 6.5s ease-in-out infinite;
+}
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 0.75rem;
+  animation: marquee 36s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line));
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  padding: 0.6rem 0.95rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 14%, transparent),
+    0 0 24px -16px var(--glow-a);
+}
+
+.marquee-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--brass);
+  box-shadow: 0 0 10px var(--brass);
+}
+
 @keyframes blink {
   0%,
   45% {
@@ -360,6 +482,45 @@ html.theme-animate {
   50%,
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes hero-dot {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes float-panel {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-chip {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
@@ -394,10 +555,18 @@ html.theme-animate {
   .rise,
   .reveal,
   .orb,
-  .caret {
+  .caret,
+  .hero-dot,
+  .float-panel,
+  .float-chip,
+  .marquee-track {
     animation: none;
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .hero-follow {
     transition: none;
   }
 
