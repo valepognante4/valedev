@@ -28,7 +28,13 @@ const es = {
     titleBefore: "Software ",
     titleMark: "a medida",
     titleAfter: " para la operación de tu negocio.",
-    lead: "Landings, tiendas online y sistemas web. Alcance definido y entrega directa.",
+    lead: "Alcance definido y contacto directo. Landings, tiendas y sistemas web.",
+    headline: [
+      { text: "Software", italic: false },
+      { text: "a medida", italic: true },
+      { text: "para tu negocio.", italic: false },
+    ],
+    scroll: "Bajar a la siguiente sección",
     primary: "Ver servicios",
     secondary: "Solicitar propuesta",
     session: "sesión activa",
@@ -55,8 +61,14 @@ const es = {
   about: {
     index: "01",
     title: "Sobre el trabajo",
+    mark: "trabajo",
     lead: "Desarrollo software independiente para empresas que necesitan una solución propia.",
     text: "El proyecto parte del problema del negocio. Acordamos el alcance y construimos un sistema que el equipo puede operar con claridad.",
+    voice: "Diseño y desarrollo cada sistema. El contacto es directo, con quien lo construye.",
+    terminal: "proceso",
+    steps: ["alcance definido", "diseño", "desarrollo", "entrega"],
+    photoNote: "Espacio para una foto",
+    photoLabel: "Vale I Dev",
     points: [
       { title: "Alcance definido", text: "El contenido del trabajo queda establecido antes de comenzar." },
       { title: "Solución específica", text: "Cada pieza se resuelve para el caso, sin plantillas genéricas." },
@@ -66,6 +78,7 @@ const es = {
   pricing: {
     index: "02",
     title: "Servicios",
+    mark: "Servicios",
     subtitle: "Valores de referencia en dólares. La propuesta se ajusta al alcance de cada proyecto.",
     from: "Desde",
     currency: "USD",
@@ -101,7 +114,9 @@ const es = {
   },
   maintenance: {
     index: "03",
+    status: "Todo operativo",
     title: "Mantenimiento",
+    mark: "Mantenimiento",
     subtitle: "Un abono mensual, independiente de la construcción inicial.",
     lead: "Un sistema en producción necesita actualizaciones, soporte y ajustes. El abono mantiene estable la inversión y evita que un incidente menor se convierta en una corrección costosa.",
     why: "Qué incluye el abono",
@@ -117,6 +132,7 @@ const es = {
   classes: {
     index: "04",
     title: "Clases y mentorías",
+    mark: "mentorías",
     subtitle: "Formación individual o en grupo para quien quiere aprender a construir software.",
     cta: "Reservar una sesión",
     items: [
@@ -143,7 +159,9 @@ const es = {
   contact: {
     index: "05",
     title: "Solicitar una propuesta",
+    mark: "propuesta",
     lead: "Indique el tipo de proyecto y el objetivo. La respuesta es directa y concreta.",
+    reply: "Respondo en menos de 24 h",
     final: "Cuénteme qué necesita resolver.",
     emailLabel: "Correo",
     whatsappLabel: "WhatsApp",
@@ -154,7 +172,7 @@ const es = {
     namePlaceholder: "Nombre y apellido",
     emailPlaceholder: "correo@empresa.com",
     messagePlaceholder: "Landing, tienda, sistema o clase que necesita.",
-    send: "Enviar consulta",
+    send: "Preparar correo",
     note: "El envío abre el correo con el mensaje preparado. Los datos no se almacenan en un servidor.",
     opened: "La consulta quedó preparada en su correo.",
     fallback: "Si no se abrió, escriba a",

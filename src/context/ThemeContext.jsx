@@ -16,7 +16,7 @@ export function ThemeProvider({ children }) {
     localStorage.setItem(THEME_KEY, theme);
 
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "dark" ? "#07080f" : "#f4f5fb");
+    if (meta) meta.setAttribute("content", theme === "dark" ? "#07070B" : "#FAFAFC");
   }, [theme]);
 
   const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);

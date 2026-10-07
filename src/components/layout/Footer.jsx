@@ -1,6 +1,5 @@
 import { site } from "@/config/site";
 import { useLanguage } from "@/context/LanguageContext";
-import Container from "@/components/ui/Container";
 import Logo from "@/components/layout/Logo";
 
 export default function Footer() {
@@ -13,21 +12,20 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-line">
-      <Container className="flex flex-col gap-8 py-10 md:flex-row md:items-end md:justify-between">
+    <footer className="site-footer">
+      <div className="section-rule" aria-hidden="true" />
+      <div className="footer-row">
         <div>
           <a href="#inicio" aria-label={t.a11y.home}>
             <Logo />
           </a>
-          <p className="mt-4 max-w-sm text-base font-medium leading-snug text-ink">{t.contact.final}</p>
-          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+          <ul className="footer-links">
             {channels.map((channel) => (
               <li key={channel.label}>
                 <a
                   href={channel.href}
                   target={channel.href.startsWith("http") ? "_blank" : undefined}
                   rel={channel.href.startsWith("http") ? "noreferrer noopener" : undefined}
-                  className="text-sm text-mute transition-colors duration-300 hover:text-ink"
                 >
                   {channel.label}
                 </a>
@@ -35,13 +33,16 @@ export default function Footer() {
             ))}
           </ul>
         </div>
-        <div className="text-sm text-mute">
+        <div className="footer-meta">
           <p>{t.footer.note}</p>
-          <p className="mt-2">
+          <p>
             © {year} Vale I Dev. {t.footer.rights}
           </p>
         </div>
-      </Container>
+      </div>
+      <p className="watermark" aria-hidden="true">
+        Vale DEV
+      </p>
     </footer>
   );
 }

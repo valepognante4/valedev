@@ -28,7 +28,13 @@ const en = {
     titleBefore: "Custom ",
     titleMark: "software",
     titleAfter: " for the way your business operates.",
-    lead: "Landing pages, online stores, and web systems. A defined scope and a direct delivery.",
+    lead: "A defined scope and direct contact. Landing pages, stores, and web systems.",
+    headline: [
+      { text: "Custom", italic: false },
+      { text: "software", italic: true },
+      { text: "for your business.", italic: false },
+    ],
+    scroll: "Move to the next section",
     primary: "View services",
     secondary: "Request a proposal",
     session: "live session",
@@ -55,8 +61,14 @@ const en = {
   about: {
     index: "01",
     title: "The work",
+    mark: "work",
     lead: "I build independent, custom software for companies that need their own solution.",
     text: "The project starts with the business problem. We agree on the scope and I build a system the team can operate with clarity.",
+    voice: "I design and build each system. You speak directly with the person who makes it.",
+    terminal: "process",
+    steps: ["scope defined", "design", "build", "delivery"],
+    photoNote: "Space for a photo",
+    photoLabel: "Vale I Dev",
     points: [
       { title: "Defined scope", text: "What the work includes is set before it begins." },
       { title: "Specific solution", text: "Each piece is resolved for the case, without a generic template." },
@@ -66,6 +78,7 @@ const en = {
   pricing: {
     index: "02",
     title: "Services",
+    mark: "Services",
     subtitle: "Reference prices in US dollars. The proposal follows the scope of each project.",
     from: "From",
     currency: "USD",
@@ -101,7 +114,9 @@ const en = {
   },
   maintenance: {
     index: "03",
+    status: "All operational",
     title: "Maintenance",
+    mark: "Maintenance",
     subtitle: "A monthly plan, separate from the initial build.",
     lead: "A system in production needs updates, support, and adjustments. The plan keeps the investment stable and stops a small incident from becoming an expensive repair.",
     why: "What the plan includes",
@@ -117,6 +132,7 @@ const en = {
   classes: {
     index: "04",
     title: "Classes and mentoring",
+    mark: "mentoring",
     subtitle: "Individual or small-group training for people who want to learn how to build software.",
     cta: "Book a session",
     items: [
@@ -143,7 +159,9 @@ const en = {
   contact: {
     index: "05",
     title: "Request a proposal",
+    mark: "proposal",
     lead: "Share the type of project and the goal. The reply is direct and specific.",
+    reply: "I reply in under 24 hours",
     final: "Tell me what you need to solve.",
     emailLabel: "Email",
     whatsappLabel: "WhatsApp",
@@ -154,7 +172,7 @@ const en = {
     namePlaceholder: "Full name",
     emailPlaceholder: "email@company.com",
     messagePlaceholder: "The landing page, store, system, or class you need.",
-    send: "Send inquiry",
+    send: "Compose email",
     note: "Sending opens your email app with the message ready. Nothing is stored on a server.",
     opened: "The inquiry is ready in your email app.",
     fallback: "If it did not open, write to",

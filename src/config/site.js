@@ -9,9 +9,4 @@ export const site = {
   whatsappDisplay: "+54 357 152 9902",
   instagram: "https://www.instagram.com/innovamvp",
   instagramHandle: "@innovamvp",
-  projects: {
-    soundly: "",
-    aurastock: "",
-    pos: "",
-  },
 };

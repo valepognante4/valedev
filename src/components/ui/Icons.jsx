@@ -56,6 +56,14 @@ export function IconArrow({ className }) {
   );
 }
 
+export function IconArrowRight({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </Svg>
+  );
+}
+
 export function IconServer({ className }) {
   return (
     <Svg className={className}>

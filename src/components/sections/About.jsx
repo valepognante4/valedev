@@ -1,30 +1,82 @@
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import Section from "@/components/ui/Section";
+import RevealText from "@/components/ui/RevealText";
+import ScrubText from "@/components/ui/ScrubText";
 import Reveal from "@/components/ui/Reveal";
+
+const ease = [0.16, 1, 0.3, 1];
+
+function ProcessTerminal({ title, steps }) {
+  const reduce = useReducedMotion();
+  const [count, setCount] = useState(reduce ? steps.length : 0);
+
+  useEffect(() => {
+    if (reduce || count >= steps.length) return undefined;
+    const timer = setTimeout(() => setCount((value) => value + 1), count === 0 ? 400 : 680);
+    return () => clearTimeout(timer);
+  }, [count, reduce, steps.length]);
+
+  return (
+    <div className="term" aria-hidden="true">
+      <div className="term-bar">
+        <span />
+        <span />
+        <span />
+        <em>{title}</em>
+      </div>
+      <ol>
+        {steps.slice(0, count).map((step, index) => (
+          <li key={step}>
+            <b>0{index + 1}</b>
+            {step}
+            {index === count - 1 && count < steps.length ? <i className="caret" /> : null}
+          </li>
+        ))}
+        {count === 0 ? (
+          <li>
+            <i className="caret" />
+          </li>
+        ) : null}
+      </ol>
+    </div>
+  );
+}
 
 export default function About() {
   const { t } = useLanguage();
+  const reduce = useReducedMotion();
 
   return (
     <Section id="acerca">
-      <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-        <Reveal>
-          <p className="text-xs font-medium tracking-[0.22em] text-accent uppercase">{t.about.index}</p>
-          <h2 className="mt-4 font-sans font-semibold text-4xl tracking-tight text-ink md:text-5xl">{t.about.title}</h2>
-        </Reveal>
+      <div className="about-grid">
+        <div className="about-sticky">
+          <div>
+            <p className="section-index">{t.about.index}</p>
+            <RevealText text={t.about.title} mark={t.about.mark} />
+          </div>
+          <ProcessTerminal title={t.about.terminal} steps={t.about.steps} />
+        </div>
         <div>
-          <Reveal delay={80}>
-            <p className="text-xl font-medium leading-snug tracking-tight text-ink">{t.about.lead}</p>
-            <p className="mt-5 max-w-xl leading-relaxed text-mute">{t.about.text}</p>
-          </Reveal>
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          <ScrubText text={t.about.lead} />
+          <p className="about-copy">{t.about.text}</p>
+          <p className="about-voice">{t.about.voice}</p>
+          <div className="about-points">
             {t.about.points.map((point, index) => (
-              <Reveal key={point.title} delay={120 + index * 70} className="h-full">
-                <article className="glow-card h-full p-5">
-                  <p className="font-sans font-semibold text-xl text-ink">{point.title}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-mute">{point.text}</p>
-                </article>
-              </Reveal>
+              <article key={point.title} className="about-row">
+                <motion.span
+                  className="about-rule"
+                  aria-hidden="true"
+                  initial={{ scaleX: reduce ? 1 : 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true, margin: "-10% 0px" }}
+                  transition={{ duration: reduce ? 0 : 0.8, delay: index * 0.08, ease }}
+                />
+                <span className="about-num">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{point.title}</h3>
+                <p>{point.text}</p>
+              </article>
             ))}
           </div>
         </div>

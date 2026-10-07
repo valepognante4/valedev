@@ -1,23 +1,35 @@
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/cn";
-import Container from "@/components/ui/Container";
-import { IconClose, IconMenu } from "@/components/ui/Icons";
-import LanguageSwitch from "@/components/layout/LanguageSwitch";
 import Logo from "@/components/layout/Logo";
+import LanguageSwitch from "@/components/layout/LanguageSwitch";
+import ThemeToggle from "@/components/layout/ThemeToggle";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 export default function Navbar() {
   const { t } = useLanguage();
   const active = useActiveSection();
+  const lenis = useLenis();
   const [open, setOpen] = useState(false);
+  const [compact, setCompact] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+    const onScroll = () => setCompact(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!lenis) return undefined;
+    if (open) lenis.stop();
+    else lenis.start();
+    return undefined;
+  }, [lenis, open]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -31,71 +43,51 @@ export default function Navbar() {
   const close = () => setOpen(false);
 
   return (
-    <header className="nav-glow fixed inset-x-0 top-0 z-40 border-b border-line bg-canvas/70 backdrop-blur-2xl">
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <a href="#inicio" aria-label={t.a11y.home} onClick={close} className="shrink-0">
+    <header className="nav-fixed">
+      <div className={cn("nav-shell", compact && "is-compact")}>
+        <a href="#inicio" aria-label={t.a11y.home} onClick={close}>
           <Logo />
         </a>
-
-        <nav className="hidden items-center gap-5 xl:flex" aria-label={t.a11y.menu}>
+        <nav className="nav-links" aria-label={t.a11y.menu}>
           {t.nav.map((link) => {
             const current = active === link.href.slice(1);
             return (
-              <a
-                key={link.href}
-                href={link.href}
-                aria-current={current ? "page" : undefined}
-                className={cn(
-                  "relative py-1 text-sm transition-colors duration-300",
-                  current ? "text-ink" : "text-mute hover:text-ink"
-                )}
-              >
-                {link.label}
-                <span
-                  className={cn(
-                    "absolute -bottom-1 left-0 h-px w-full origin-left bg-accent transition-transform duration-300",
-                    current ? "scale-x-100" : "scale-x-0"
-                  )}
-                />
+              <a key={link.href} href={link.href} aria-current={current ? "page" : undefined} className={cn("nav-link", current && "is-current")}>
+                {current ? <motion.span layoutId="nav-active" className="nav-active" transition={{ type: "spring", bounce: 0.18, duration: 0.5 }} /> : null}
+                <span style={{ position: "relative" }}>{link.label}</span>
               </a>
             );
           })}
         </nav>
-
-        <div className="flex items-center gap-2">
+        <div className="nav-tools">
           <LanguageSwitch />
-          <a
-            href="#contacto"
-            className="btn-sheen hidden bg-accent px-4 py-2 text-sm font-medium text-on-accent transition duration-300 hover:-translate-y-0.5 lg:inline-flex"
-          >
+          <ThemeToggle />
+          <MagneticButton href="#contacto" className="btn-gradient nav-cta">
             {t.navCta}
-          </a>
+          </MagneticButton>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center border border-line text-ink xl:hidden"
+            className="menu-btn"
             aria-expanded={open}
             aria-label={open ? t.a11y.closeMenu : t.a11y.openMenu}
             onClick={() => setOpen((value) => !value)}
           >
-            {open ? <IconClose className="h-4 w-4" /> : <IconMenu className="h-4 w-4" />}
+            {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
           </button>
         </div>
-      </Container>
-
-      {open && (
-        <nav className="border-t border-line bg-canvas xl:hidden" aria-label={t.a11y.menu}>
-          <Container className="flex flex-col py-4">
-            {t.nav.map((link) => (
-              <a key={link.href} href={link.href} onClick={close} className="border-b border-line py-3 text-base text-ink">
-                {link.label}
-              </a>
-            ))}
-            <a href="#contacto" onClick={close} className="btn-sheen mt-4 bg-accent px-4 py-3 text-center text-sm font-medium text-on-accent">
-              {t.navCta}
+      </div>
+      {open ? (
+        <nav className="nav-menu" aria-label={t.a11y.menu}>
+          {t.nav.map((link) => (
+            <a key={link.href} href={link.href} onClick={close}>
+              {link.label}
             </a>
-          </Container>
+          ))}
+          <MagneticButton href="#contacto" className="btn-gradient" onClick={close}>
+            {t.navCta}
+          </MagneticButton>
         </nav>
-      )}
+      ) : null}
     </header>
   );
 }
