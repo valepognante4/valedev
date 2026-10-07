@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Innova MVP — Ingeniería y Soluciones Tecnológicas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:#020818;
+  color:#e2e8f0;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#020818}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#7c3aed,#06b6d4);border-radius:3px}
+
+/* ── TOKENS ── */
+:root{
+  --purple:#7c3aed;--purple-light:#a78bfa;
+  --cyan:#06b6d4;--cyan-light:#22d3ee;
+  --bg:#020818;--bg2:#0d1729;
+  --glass:rgba(255,255,255,0.04);
+  --glass-border:rgba(124,58,237,0.25);
+  --text:#e2e8f0;--muted:#94a3b8;
+}
+
+/* ── UTILITIES ── */
+.gradient-text{
+  background:linear-gradient(135deg,#a78bfa 0%,#06b6d4 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+
+/* ── ANIMATIONS ── */
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-18px)}
+}
+@keyframes pulseDot{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.4)}
+}
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 20px rgba(124,58,237,.4),0 0 40px rgba(6,182,212,.2)}
+  50%{box-shadow:0 0 40px rgba(124,58,237,.7),0 0 80px rgba(6,182,212,.4)}
+}
+@keyframes blobFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(30px,-20px) scale(1.05)}
+  66%{transform:translate(-20px,15px) scale(.95)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes spin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+/* ── MESH BG ── */
+.mesh-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.blob{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.18;
+  animation:blobFloat 12s ease-in-out infinite;
+}
+.blob-1{width:600px;height:600px;background:radial-gradient(circle,#7c3aed,transparent 70%);top:-10%;left:-10%;animation-delay:0s}
+.blob-2{width:500px;height:500px;background:radial-gradient(circle,#06b6d4,transparent 70%);top:40%;right:-5%;animation-delay:-4s}
+.blob-3{width:400px;height:400px;background:radial-gradient(circle,#a78bfa,transparent 70%);bottom:10%;left:30%;animation-delay:-8s}
+
+/* ── NAVBAR ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(2,8,24,.7);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(124,58,237,.2);
+  transition:background .3s;
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 1.5rem;max-width:1200px;margin:0 auto;
+}
+.nav-logo{display:flex;align-items:center;gap:.65rem;text-decoration:none}
+.nav-logo-text{font-family:'Exo 2',sans-serif;font-weight:700;font-size:1.2rem}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  color:#fff;border:none;border-radius:8px;
+  padding:.5rem 1.25rem;font-size:.88rem;font-weight:600;
+  cursor:pointer;transition:all .3s;white-space:nowrap;
+  box-shadow:0 0 20px rgba(124,58,237,.3);
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(124,58,237,.6)}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+.mobile-menu{
+  display:none;flex-direction:column;gap:1rem;
+  padding:1.25rem 1.5rem;
+  border-top:1px solid rgba(124,58,237,.15);
+  background:rgba(2,8,24,.95);
+}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-weight:500;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.mobile-menu a:hover{color:#fff}
+.mobile-menu.open{display:flex}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:7rem 1.5rem 4rem;
+}
+.hero-content{
+  max-width:1200px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(124,58,237,.12);
+  border:1px solid rgba(124,58,237,.3);
+  border-radius:50px;padding:.35rem 1rem;
+  font-size:.78rem;font-weight:500;color:#a78bfa;
+  margin-bottom:1.5rem;
+}
+.badge-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#22d3ee;animation:pulseDot 1.8s ease-in-out infinite;
+}
+.hero h1{
+  font-family:'Exo 2',sans-serif;
+  font-size:clamp(2.4rem,5vw,3.8rem);
+  font-weight:900;line-height:1.12;
+  margin-bottom:1.25rem;
+}
+.hero-sub{
+  color:var(--muted);line-height:1.7;font-size:1.05rem;
+  margin-bottom:2rem;max-width:480px;
+}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem}
+.glow-btn{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#7c3aed,#06b6d4);
+  color:#fff;border:none;border-radius:10px;
+  padding:.8rem 1.8rem;font-size:1rem;font-weight:600;
+  cursor:pointer;transition:all .3s;
+  box-shadow:0 0 25px rgba(124,58,237,.4);
+}
+.glow-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#a78bfa,#22d3ee);
+  opacity:0;transition:opacity .3s;
+}
+.glow-btn:hover::before{opacity:1}
+.glow-btn:hover{transform:translateY(-3px);box-shadow:0 8px 35px rgba(124,58,237,.6)}
+.glow-btn span{position:relative;z-index:1}
+.outline-btn{
+  background:transparent;
+  border:1px solid rgba(124,58,237,.5);
+  color:#a78bfa;border-radius:10px;
+  padding:.8rem 1.8rem;font-size:1rem;font-weight:600;
+  cursor:pointer;transition:all .3s;
+}
+.outline-btn:hover{background:rgba(124,58,237,.1);transform:translateY(-3px);border-color:var(--purple-light)}
+.metrics{display:flex;gap:2.5rem}
+.metric-val{font-family:'Exo 2',sans-serif;font-size:2rem;font-weight:800}
+.metric-lab{color:var(--muted);font-size:.82rem;margin-top:.1rem}
+
+/* ── HERO LOGO ── */
+.hero-logo-wrap{
+  display:flex;align-items:center;justify-content:center;
+  animation:float 5s ease-in-out infinite;
+  filter:drop-shadow(0 0 40px rgba(124,58,237,.5)) drop-shadow(0 0 80px rgba(6,182,212,.3));
+}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:1;padding:6rem 1.5rem}
+.section-title{
+  font-family:'Exo 2',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);
+  font-weight:800;text-align:center;margin-bottom:.75rem;
+}
+.section-sub{color:var(--muted);text-align:center;max-width:560px;margin:0 auto 3.5rem;line-height:1.7}
+
+/* ── SERVICIOS ── */
+#servicios{background:rgba(13,23,41,.3)}
+.services-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;
+  max-width:1200px;margin:0 auto;
+}
+.service-card{
+  border-radius:16px;padding:1.5rem;
+  transition:transform .3s,box-shadow .3s;
+  cursor:default;
+}
+.service-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 40px rgba(124,58,237,.3);
+}
+.service-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:1rem;
+}
+.service-card h3{font-family:'Exo 2',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.service-card p{color:var(--muted);font-size:.85rem;line-height:1.6}
+.service-accent-p{border-color:rgba(124,58,237,.3)}
+.service-accent-c{border-color:rgba(6,182,212,.3)}
+.service-icon-p{background:rgba(124,58,237,.15);color:#a78bfa}
+.service-icon-c{background:rgba(6,182,212,.15);color:#22d3ee}
+
+/* WA bar */
+.wa-bar{
+  max-width:700px;margin:3rem auto 0;
+  border-radius:16px;padding:1.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  border:1px solid rgba(34,197,94,.25);
+  background:rgba(34,197,94,.06);
+}
+.wa-bar-text h4{font-family:'Exo 2',sans-serif;font-weight:700;margin-bottom:.2rem}
+.wa-bar-text p{color:var(--muted);font-size:.85rem}
+.wa-btn{
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  color:#fff;border:none;border-radius:10px;
+  padding:.7rem 1.5rem;font-weight:600;cursor:pointer;
+  white-space:nowrap;transition:all .3s;
+  box-shadow:0 0 20px rgba(34,197,94,.3);
+  display:flex;align-items:center;gap:.5rem;
+}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(34,197,94,.5)}
+
+/* ── PRECIOS ── */
+#precios{background:transparent}
+.pricing-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+  max-width:1100px;margin:0 auto;
+}
+.price-card{
+  border-radius:20px;padding:2rem;position:relative;
+  transition:transform .3s,box-shadow .3s;
+}
+.price-card:hover{transform:translateY(-8px)}
+.price-card.featured{
+  border-color:rgba(124,58,237,.5);
+  box-shadow:0 0 40px rgba(124,58,237,.25);
+  animation:glowPulse 3s ease-in-out infinite;
+}
+.popular-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#7c3aed,#06b6d4);
+  color:#fff;border-radius:50px;padding:.25rem 1rem;
+  font-size:.75rem;font-weight:700;white-space:nowrap;
+}
+.price-name{font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.price-val{font-family:'Exo 2',sans-serif;font-size:2.5rem;font-weight:900;margin:.75rem 0}
+.price-sub{color:var(--muted);font-size:.8rem;margin-bottom:1.25rem}
+.price-features{list-style:none;margin-bottom:1.5rem}
+.price-features li{
+  display:flex;align-items:flex-start;gap:.5rem;
+  color:var(--muted);font-size:.88rem;padding:.35rem 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.price-features li:last-child{border:none}
+.check{color:#22d3ee;flex-shrink:0;margin-top:2px}
+.price-btn{
+  width:100%;border-radius:10px;padding:.75rem;
+  font-weight:600;font-size:.95rem;cursor:pointer;transition:all .3s;border:none;
+}
+.price-btn-grad{background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff}
+.price-btn-grad:hover{box-shadow:0 6px 25px rgba(124,58,237,.5);transform:translateY(-2px)}
+.price-btn-out{background:transparent;border:1px solid rgba(124,58,237,.4);color:#a78bfa}
+.price-btn-out:hover{background:rgba(124,58,237,.1);transform:translateY(-2px)}
+
+/* ── CONTACTO ── */
+#contacto{background:rgba(13,23,41,.3)}
+.contact-panel{
+  max-width:680px;margin:0 auto;
+  border-radius:24px;padding:3rem;
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem}
+.form-group.full{grid-column:1/-1}
+label{font-size:.82rem;font-weight:500;color:#a78bfa}
+input,select,textarea{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(124,58,237,.25);
+  border-radius:8px;padding:.7rem 1rem;
+  color:#fff;font-family:'Inter',sans-serif;font-size:.9rem;
+  transition:border-color .2s,box-shadow .2s;
+  outline:none;width:100%;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(124,58,237,.15);
+}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23a78bfa' d='M8 10L3 5h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;background-size:12px;padding-right:2.5rem}
+select option{background:#0d1729;color:#fff}
+textarea{resize:vertical;min-height:110px}
+.submit-btn{
+  width:100%;margin-top:.5rem;
+  background:linear-gradient(135deg,#7c3aed,#06b6d4);
+  color:#fff;border:none;border-radius:10px;
+  padding:.9rem;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:all .3s;
+  box-shadow:0 0 25px rgba(124,58,237,.35);
+}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 35px rgba(124,58,237,.6)}
+.form-note{text-align:center;color:var(--muted);font-size:.8rem;margin-top:.75rem}
+
+/* Social links */
+.social-cards{display:flex;gap:1rem;margin-top:2rem;justify-content:center;flex-wrap:wrap}
+.social-card{
+  border-radius:12px;padding:.75rem 1.25rem;
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.88rem;font-weight:600;
+  text-decoration:none;color:#fff;transition:all .3s;
+}
+.social-fb{background:rgba(24,119,242,.12);border:1px solid rgba(24,119,242,.3)}
+.social-fb:hover{background:rgba(24,119,242,.2);transform:translateY(-2px)}
+.social-tk{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
+.social-tk:hover{background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.social-ig{background:rgba(225,48,108,.12);border:1px solid rgba(225,48,108,.3)}
+.social-ig:hover{background:rgba(225,48,108,.2);transform:translateY(-2px)}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:1;
+  padding:2rem 1.5rem;
+  border-top:1px solid rgba(124,58,237,.15);
+  background:rgba(2,8,24,.8);
+}
+.footer-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.footer-logo{display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.footer-logo-text{font-family:'Exo 2',sans-serif;font-weight:700;font-size:.95rem}
+.footer-copy{color:var(--muted);font-size:.82rem}
+.footer-links{display:flex;gap:1rem}
+.footer-links a{color:var(--muted);font-size:.82rem;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:#a78bfa}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .services-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-grid{grid-template-columns:1fr;max-width:420px}
+  .hero-content{grid-template-columns:1fr;text-align:center}
+  .hero-content>div:first-child{display:flex;flex-direction:column;align-items:center}
+  .hero-sub{text-align:center}
+  .hero-logo-wrap{order:-1;margin-bottom:1rem}
+  .metrics{justify-content:center}
+}
+@media(max-width:640px){
+  .services-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .nav-links{display:none}
+  .nav-cta-desktop{display:none}
+  .burger{display:flex}
+  .wa-bar{flex-direction:column;text-align:center}
+  .contact-panel{padding:1.75rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- MESH BACKGROUND -->
+<div class="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <!-- Toroidal Logo SVG (mini) -->
+      <svg width="38" height="38" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow-nav"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="ng1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient>
+          <linearGradient id="ng2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+        </defs>
+        <!-- Trefoil knot approximation -->
+        <g filter="url(#glow-nav)" opacity="0.9">
+          <ellipse cx="100" cy="85" rx="55" ry="38" stroke="url(#ng1)" stroke-width="5" fill="none" transform="rotate(-30,100,100)"/>
+          <ellipse cx="100" cy="85" rx="50" ry="33" stroke="url(#ng2)" stroke-width="3" fill="none" transform="rotate(-30,100,100)"/>
+          <ellipse cx="100" cy="115" rx="55" ry="38" stroke="url(#ng1)" stroke-width="5" fill="none" transform="rotate(30,100,100)"/>
+          <ellipse cx="100" cy="115" rx="50" ry="33" stroke="url(#ng2)" stroke-width="3" fill="none" transform="rotate(30,100,100)"/>
+          <ellipse cx="100" cy="100" rx="38" ry="55" stroke="url(#ng2)" stroke-width="5" fill="none"/>
+          <ellipse cx="100" cy="100" rx="33" ry="50" stroke="url(#ng1)" stroke-width="3" fill="none"/>
+        </g>
+      </svg>
+      <span class="nav-logo-text gradient-text">Innova MVP</span>
+    </a>
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#precios">Precios</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <button class="nav-cta nav-cta-desktop" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contactar</button>
+    <button class="burger" id="burger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#servicios">Servicios</a>
+    <a href="#precios">Precios</a>
+    <a href="#contacto">Contacto</a>
+    <button class="nav-cta" style="margin-top:.5rem" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contactar</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-content">
+    <!-- Left -->
+    <div>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Innovación Digital · Full-Stack · Soluciones Integrales
+      </div>
+      <h1>
+        <span class="gradient-text">Ingeniería</span> y<br>
+        Soluciones<br>
+        <span class="gradient-text">Tecnológicas</span>
+      </h1>
+      <p class="hero-sub">
+        Desarrollamos software a medida, aplicaciones web modernas y brindamos soporte técnico integral para particulares y empresas. Tu visión digital, nuestra ingeniería.
+      </p>
+      <div class="hero-btns">
+        <button class="glow-btn" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})"><span>Iniciar proyecto</span></button>
+        <button class="outline-btn" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">Ver servicios</button>
+      </div>
+      <div class="metrics">
+        <div>
+          <div class="metric-val gradient-text">50+</div>
+          <div class="metric-lab">Proyectos</div>
+        </div>
+        <div>
+          <div class="metric-val gradient-text">30+</div>
+          <div class="metric-lab">Clientes</div>
+        </div>
+        <div>
+          <div class="metric-val gradient-text">5+</div>
+          <div class="metric-lab">Años</div>
+        </div>
+      </div>
+    </div>
+    <!-- Right: Toroidal Logo -->
+    <div class="hero-logo-wrap">
+      <svg width="340" height="340" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow-big" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="lg-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#22d3ee"/>
+            <stop offset="50%" stop-color="#06b6d4"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+          <linearGradient id="lg-purple" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#a78bfa"/>
+            <stop offset="50%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+          <linearGradient id="lg-mix" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#22d3ee"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Outer cyan rings (trefoil loop top-right) -->
+        <g filter="url(#glow-big)">
+          <!-- Large right lobe -->
+          <ellipse cx="240" cy="200" rx="110" ry="78" stroke="url(#lg-cyan)" stroke-width="4.5" fill="none" transform="rotate(15,200,200)" opacity="0.95"/>
+          <ellipse cx="240" cy="200" rx="100" ry="68" stroke="url(#lg-cyan)" stroke-width="3" fill="none" transform="rotate(15,200,200)" opacity="0.7"/>
+          <ellipse cx="240" cy="200" rx="90" ry="58" stroke="url(#lg-cyan)" stroke-width="2" fill="none" transform="rotate(15,200,200)" opacity="0.45"/>
+          <ellipse cx="240" cy="200" rx="80" ry="48" stroke="url(#lg-cyan)" stroke-width="1.5" fill="none" transform="rotate(15,200,200)" opacity="0.3"/>
+          <ellipse cx="240" cy="200" rx="70" ry="38" stroke="url(#lg-cyan)" stroke-width="1" fill="none" transform="rotate(15,200,200)" opacity="0.2"/>
+
+          <!-- Bottom lobe -->
+          <ellipse cx="200" cy="265" rx="110" ry="78" stroke="url(#lg-cyan)" stroke-width="4.5" fill="none" transform="rotate(-45,200,200)" opacity="0.85"/>
+          <ellipse cx="200" cy="265" rx="100" ry="68" stroke="url(#lg-cyan)" stroke-width="3" fill="none" transform="rotate(-45,200,200)" opacity="0.6"/>
+          <ellipse cx="200" cy="265" rx="90" ry="58" stroke="url(#lg-cyan)" stroke-width="2" fill="none" transform="rotate(-45,200,200)" opacity="0.4"/>
+          <ellipse cx="200" cy="265" rx="80" ry="48" stroke="url(#lg-cyan)" stroke-width="1.5" fill="none" transform="rotate(-45,200,200)" opacity="0.25"/>
+        </g>
+
+        <!-- Purple diagonal band (the thick purple arc crossing through) -->
+        <g filter="url(#glow-big)">
+          <path d="M 105 155 Q 150 95 200 140 Q 255 185 290 145 Q 330 105 310 190 Q 290 270 240 290 Q 190 310 155 265 Q 115 220 105 155Z"
+            stroke="url(#lg-purple)" stroke-width="16" fill="none" opacity="0.9" stroke-linecap="round"/>
+          <path d="M 110 160 Q 152 100 200 143 Q 253 186 287 147 Q 325 110 307 192 Q 289 268 241 287 Q 192 308 158 264 Q 119 222 110 160Z"
+            stroke="url(#lg-mix)" stroke-width="7" fill="none" opacity="0.7" stroke-linecap="round"/>
+        </g>
+
+        <!-- Left lobe cyan -->
+        <g filter="url(#glow-soft)">
+          <ellipse cx="160" cy="200" rx="110" ry="78" stroke="url(#lg-cyan)" stroke-width="4.5" fill="none" transform="rotate(-15,200,200)" opacity="0.8"/>
+          <ellipse cx="160" cy="200" rx="100" ry="68" stroke="url(#lg-cyan)" stroke-width="3" fill="none" transform="rotate(-15,200,200)" opacity="0.55"/>
+          <ellipse cx="160" cy="200" rx="90" ry="58" stroke="url(#lg-cyan)" stroke-width="2" fill="none" transform="rotate(-15,200,200)" opacity="0.35"/>
+          <ellipse cx="160" cy="200" rx="80" ry="48" stroke="url(#lg-cyan)" stroke-width="1.5" fill="none" transform="rotate(-15,200,200)" opacity="0.2"/>
+        </g>
+
+        <!-- Center glow dot -->
+        <circle cx="200" cy="200" r="6" fill="url(#lg-cyan)" opacity="0.9" filter="url(#glow-big)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="container">
+    <h2 class="section-title">Nuestros <span class="gradient-text">Servicios</span></h2>
+    <p class="section-sub">Desde el desarrollo de software escalable hasta el soporte técnico presencial. Una solución para cada necesidad tecnológica.</p>
+
+    <div class="services-grid">
+      <!-- Web Dev -->
+      <div class="service-card glass service-accent-p">
+        <div class="service-icon service-icon-p">&lt;/&gt;</div>
+        <h3>Desarrollo Web & Software</h3>
+        <p>Apps web con React/Next.js, APIs REST/GraphQL, sistemas full-stack Node.js/Python, landing pages, integraciones y consultoría técnica.</p>
+      </div>
+      <!-- Soporte 1 -->
+      <div class="service-card glass service-accent-c">
+        <div class="service-icon service-icon-c">📱</div>
+        <h3>Soporte y Config. de Dispositivos</h3>
+        <p>Configuración de celulares, smartbands, wearables. Creación de cuentas Google y Apple ID desde cero para particulares.</p>
+      </div>
+      <!-- Soporte 2 -->
+      <div class="service-card glass service-accent-p">
+        <div class="service-icon service-icon-p">💻</div>
+        <h3>Puesta a Punto de PCs Nuevas</h3>
+        <p>Instalación de software limpio, navegadores optimizados, antivirus y herramientas básicas. Tu equipo listo para trabajar.</p>
+      </div>
+      <!-- Soporte 3 -->
+      <div class="service-card glass service-accent-c">
+        <div class="service-icon service-icon-c">🔄</div>
+        <h3>Rescate & Migración de Datos</h3>
+        <p>Respaldo completo entre dispositivos, liberación de espacio en Google Drive/Gmail/Fotos y eliminación de malware y virus.</p>
+      </div>
+      <!-- Soporte 4 -->
+      <div class="service-card glass service-accent-p">
+        <div class="service-icon service-icon-p">🖨️</div>
+        <h3>Impresoras & Redes</h3>
+        <p>Instalación y configuración Wi-Fi/USB, limpieza de drivers, mantenimiento de hardware y configuración de redes locales.</p>
+      </div>
+      <!-- Soporte 5 -->
+      <div class="service-card glass service-accent-c">
+        <div class="service-icon service-icon-c">🛡️</div>
+        <h3>Seguridad & Kit Anti-Estafas</h3>
+        <p>Recuperación de cuentas hackeadas (WhatsApp, Instagram, Gmail), activación 2FA, bloqueo de llamadas sospechosas. Ideal para adultos mayores.</p>
+      </div>
+    </div>
+
+    <!-- WhatsApp Bar -->
+    <div class="wa-bar">
+      <div class="wa-bar-text">
+        <h4>¿Tenés una consulta técnica?</h4>
+        <p>Escribinos sin compromiso al <strong>3571 529902</strong> — respondemos rápido</p>
+      </div>
+      <a href="https://wa.me/543571529902" target="_blank" class="wa-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        WhatsApp: 3571 529902
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section id="precios">
+  <div class="container">
+    <h2 class="section-title">Planes & <span class="gradient-text">Tarifas</span></h2>
+    <p class="section-sub">Soluciones de software a precios transparentes. Sin sorpresas, con calidad profesional garantizada.</p>
+    <div class="pricing-grid">
+
+      <!-- Landing Page -->
+      <div class="price-card glass">
+        <div class="price-name">Landing Page</div>
+        <div class="price-val gradient-text">$100 USD</div>
+        <div class="price-sub">Sitio one-page profesional</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Diseño UI/UX moderno</li>
+          <li><span class="check">✓</span>100% responsive</li>
+          <li><span class="check">✓</span>Animaciones y efectos</li>
+          <li><span class="check">✓</span>Formulario de contacto</li>
+          <li><span class="check">✓</span>Optimización SEO básica</li>
+          <li><span class="check">✓</span>Deploy incluido</li>
+        </ul>
+        <button class="price-btn price-btn-out" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contratar</button>
+      </div>
+
+      <!-- E-commerce FEATURED -->
+      <div class="price-card glass featured">
+        <div class="popular-badge">🔥 Más popular</div>
+        <div class="price-name">E-commerce</div>
+        <div class="price-val gradient-text">$250 USD</div>
+        <div class="price-sub">Tienda online completa</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Todo lo del plan Landing</li>
+          <li><span class="check">✓</span>Carrito de compras integrado</li>
+          <li><span class="check">✓</span>Gestión de productos</li>
+          <li><span class="check">✓</span>Panel de administración</li>
+          <li><span class="check">✓</span>Pagos online</li>
+          <li><span class="check">✓</span>Soporte 30 días</li>
+        </ul>
+        <button class="price-btn price-btn-grad" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contratar</button>
+      </div>
+
+      <!-- Software a Medida -->
+      <div class="price-card glass">
+        <div class="price-name">Software a Medida</div>
+        <div class="price-val gradient-text">Desde $400</div>
+        <div class="price-sub">Según complejidad del proyecto</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Sistema web escalable</li>
+          <li><span class="check">✓</span>Backend robusto (Node/Python)</li>
+          <li><span class="check">✓</span>Base de datos optimizada</li>
+          <li><span class="check">✓</span>API REST/GraphQL</li>
+          <li><span class="check">✓</span>Panel admin completo</li>
+          <li><span class="check">✓</span>Arquitectura full-stack</li>
+        </ul>
+        <button class="price-btn price-btn-out" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Consultar</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="container">
+    <h2 class="section-title">¿Hablamos de tu <span class="gradient-text">proyecto</span>?</h2>
+    <p class="section-sub">Completá el formulario y te respondemos en menos de 24 horas.</p>
+
+    <div class="contact-panel glass">
+      <form id="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Nombre completo</label>
+            <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" placeholder="tucorreo@gmail.com" required>
+          </div>
+          <div class="form-group full">
+            <label for="service">Tipo de servicio de interés</label>
+            <select id="service" name="service" required>
+              <option value="" disabled selected>Seleccioná un servicio</option>
+              <option value="soporte">Soporte técnico presencial</option>
+              <option value="landing">Landing Page ($100 USD)</option>
+              <option value="ecommerce">E-commerce ($250 USD)</option>
+              <option value="software">Software a medida (Desde $400)</option>
+              <option value="consultoria">Consultoría tecnológica</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="message">Mensaje</label>
+            <textarea id="message" name="message" placeholder="Contanos tu proyecto o consulta..." required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn">Enviar consulta →</button>
+        <p class="form-note">⚡ Respondemos en menos de 24 horas hábiles</p>
+      </form>
+
+      <div class="social-cards">
+        <a href="https://facebook.com/innovamvp" target="_blank" class="social-card social-fb">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </a>
+        <a href="https://tiktok.com/@innovamvp" target="_blank" class="social-card social-tk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05A6.34 6.34 0 003.15 15.3a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.69a8.18 8.18 0 004.79 1.54V6.77a4.85 4.85 0 01-1.03-.08z"/></svg>
+          TikTok
+        </a>
+        <a href="https://instagram.com/innovamvp" target="_blank" class="social-card social-ig">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          Instagram
+        </a>
+        <a href="https://wa.me/543571529902" target="_blank" class="wa-btn" style="text-decoration:none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">
+      <svg width="28" height="28" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="fg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+        <ellipse cx="100" cy="85" rx="55" ry="38" stroke="url(#fg1)" stroke-width="7" fill="none" transform="rotate(-30,100,100)"/>
+        <ellipse cx="100" cy="115" rx="55" ry="38" stroke="url(#fg1)" stroke-width="7" fill="none" transform="rotate(30,100,100)"/>
+        <ellipse cx="100" cy="100" rx="38" ry="55" stroke="url(#fg1)" stroke-width="7" fill="none"/>
+      </svg>
+      <span class="footer-logo-text gradient-text">Innova MVP</span>
+    </a>
+    <span class="footer-copy">© 2026 Innova MVP. Todos los derechos reservados.</span>
+    <div class="footer-links">
+      <a href="https://facebook.com/innovamvp" target="_blank">Facebook</a>
+      <a href="https://tiktok.com/@innovamvp" target="_blank">TikTok</a>
+      <a href="https://wa.me/543571529902" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Burger menu
+var burger = document.getElementById('burger');
+var mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', function(){
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(function(a){
+  a.addEventListener('click', function(){ mobileMenu.classList.remove('open'); });
+});
+
+// Close mobile menu on resize
+window.addEventListener('resize', function(){
+  if(window.innerWidth > 640) mobileMenu.classList.remove('open');
+});
+
+// Contact form
+function handleSubmit(e){
+  e.preventDefault();
+  var name = document.getElementById('name').value;
+  var email = document.getElementById('email').value;
+  var service = document.getElementById('service').value;
+  var message = document.getElementById('message').value;
+  var subject = encodeURIComponent('Consulta desde Innova MVP - ' + service);
+  var body = encodeURIComponent('Nombre: ' + name + '\nEmail: ' + email + '\nServicio: ' + service + '\n\nMensaje:\n' + message);
+  window.location.href = 'mailto:innovamvp@gmail.com?subject=' + subject + '&body=' + body;
+}
+
+// Scroll animations
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.style.animation = 'fadeUp .6s ease forwards';
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.service-card,.price-card').forEach(function(el){
+  el.style.opacity = '0';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

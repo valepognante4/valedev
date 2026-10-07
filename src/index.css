@@ -1,0 +1,407 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@property --canvas {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #07080f;
+}
+@property --surface {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #12141e;
+}
+@property --ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f4f5fb;
+}
+@property --mute {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #a3a6bd;
+}
+@property --line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2a2d40;
+}
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #9b8cff;
+}
+@property --on-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0c0d16;
+}
+@property --brass {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7dd3fc;
+}
+
+:root {
+  color-scheme: light;
+  --canvas: #f4f5fb;
+  --surface: #ffffff;
+  --ink: #10111a;
+  --mute: #5c6078;
+  --line: #e3e5f2;
+  --accent: #5b4fe0;
+  --on-accent: #f7f7ff;
+  --brass: #0284c7;
+  --shadow: 0 30px 70px -40px rgba(55, 48, 140, 0.35);
+  --glow-a: rgba(91, 79, 224, 0.22);
+  --glow-b: rgba(14, 165, 233, 0.16);
+}
+
+.dark {
+  color-scheme: dark;
+  --canvas: #07080f;
+  --surface: #12141e;
+  --ink: #f4f5fb;
+  --mute: #a3a6bd;
+  --line: #2a2d40;
+  --accent: #9b8cff;
+  --on-accent: #0c0d16;
+  --brass: #7dd3fc;
+  --shadow: 0 30px 80px -36px rgba(90, 70, 220, 0.55);
+  --glow-a: rgba(139, 124, 247, 0.55);
+  --glow-b: rgba(56, 189, 248, 0.32);
+}
+
+html.theme-animate {
+  transition:
+    --canvas 0.45s ease,
+    --surface 0.45s ease,
+    --ink 0.45s ease,
+    --mute 0.45s ease,
+    --line 0.45s ease,
+    --accent 0.45s ease,
+    --on-accent 0.45s ease,
+    --brass 0.45s ease;
+}
+
+@theme inline {
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-brass: var(--brass);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-style: normal;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 3px;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: color-mix(in srgb, var(--mute) 78%, transparent);
+  }
+}
+
+.shadow-panel {
+  box-shadow: var(--shadow);
+}
+
+.glass {
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 14%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.glass:hover {
+  border-color: color-mix(in srgb, var(--accent) 72%, white);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 20%, transparent),
+    0 0 28px -12px var(--glow-a);
+}
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface) 92%, white 8%),
+    color-mix(in srgb, var(--canvas) 42%, var(--surface))
+  );
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--line));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 16%, transparent),
+    0 24px 70px -40px color-mix(in srgb, var(--accent) 80%, black);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.glow-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glow-card::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent) 85%, white),
+    transparent 42%,
+    color-mix(in srgb, var(--brass) 75%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.45;
+  transition: opacity 0.35s ease;
+}
+
+.glow-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 24%, transparent),
+    0 0 46px -16px var(--glow-a),
+    0 30px 70px -34px color-mix(in srgb, var(--accent) 90%, black);
+}
+
+.glow-card:hover::after,
+.glow-card.is-featured::after {
+  opacity: 1;
+}
+
+.glow-card.is-static:hover {
+  transform: none;
+}
+
+.mesh-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--ink) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 8%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 18%, black 8%, transparent 72%);
+}
+
+.orb {
+  animation: drift 18s ease-in-out infinite;
+}
+
+.orb-b {
+  animation-duration: 24s;
+  animation-delay: -8s;
+}
+
+.nav-glow {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--accent) 40%, transparent),
+    0 18px 50px -28px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.text-shine {
+  background: linear-gradient(115deg, var(--ink) 8%, var(--accent) 52%, var(--brass) 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.caret {
+  animation: blink 1.1s steps(1) infinite;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 28%, transparent),
+    0 10px 30px -14px var(--accent);
+}
+
+.btn-sheen:hover {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 40%, transparent),
+    0 0 32px -8px var(--accent);
+}
+
+.btn-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, white 42%, transparent), transparent 70%);
+  transform: translateX(-130%);
+  transition: transform 0.65s ease;
+}
+
+.btn-sheen:hover::after {
+  transform: translateX(130%);
+}
+
+.hairline {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 80;
+  transform: translateY(-200%);
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: 0.6rem 1rem;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 8%, 0) scale(1.08);
+  }
+}
+
+@keyframes blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--canvas);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border: 3px solid var(--canvas);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.theme-animate {
+    transition: none;
+  }
+
+  .rise,
+  .reveal,
+  .orb,
+  .caret {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .glow-card:hover {
+    transform: none;
+  }
+}
